@@ -1,0 +1,20 @@
+{
+  "name": "genvoice",
+  "version": "0.1.0",
+  "description": "A web service and API for generating beautiful invoices.",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:timojarv/genvoice.git",
+    "type": "git"
+  },
+  "author": "Timo Jarventausta <timo.jaerv@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "html-pdf": "^2.1.0",
+    "moment": "^2.17.1",
+    "pug": "^2.0.0-beta6",
+    "yamljs": "^0.2.8"
+  }
+}

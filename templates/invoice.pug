@@ -1,0 +1,110 @@
+head
+	style
+		include grid12.css
+		include invoice.css
+
+	link(href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600", rel="stylesheet")
+	meta(charset="UTF-8")
+
+body
+	section.container.heading
+		.row
+			.col-xs-12
+				h1 Lasku #
+					= invoice.reference
+		.row
+			.col-xs-3
+				h5 Laskun päiväys
+				= invoice.date.created
+			.col-xs-3
+				h5 Eräpäivä
+				= invoice.date.due
+			.col-xs-3
+				h5 Maksuehto
+				= invoice.term + "pv netto"
+
+	section.container.contact
+		.row
+			.col-xs-6
+				h3.title Vastaanottaja:
+				hr
+				h2= invoice.recipient.name
+				.row.info
+					.col-xs-5
+						span.heading Osoite
+						= invoice.recipient.address
+						br
+						= invoice.recipient.zip + ', ' + invoice.recipient.city
+						br
+						= invoice.recipient.country
+					.col-xs-7
+						span.heading Yhteyssähköposti
+						= invoice.recipient.email
+						if invoice.recipient.business_id
+							span.heading Y-tunnus
+							= invoice.recipient.business_id
+
+			.col-xs-6
+				h3.title Lähettäjä:
+				hr
+				h2= invoice.sender.name
+				.row.info
+					.col-xs-5
+						span.heading Osoite
+						= invoice.sender.address
+						br
+						= invoice.sender.zip + ', ' + invoice.sender.city
+						br
+						= invoice.sender.country
+					.col-xs-7
+						span.heading Yhteyssähköposti
+						= invoice.sender.email
+						if invoice.sender.business_id
+							span.heading Y-tunnus
+							= invoice.sender.business_id
+
+	section.container.invoice
+		.row
+			.col-xs-12.title
+				h2= invoice.title
+		.row.legend
+			.col-xs-5 Tuote / palvelukuvaus
+			.col-xs-2.center Kappalehinta
+			.col-xs-1.center Vero
+			.col-xs-1.center Määrä
+			.col-xs-1.center Yksikkö
+			.col-xs-2.right Välisumma
+		hr
+		each item in invoice.items
+			.row.item
+				.col-xs-5= item.name
+				.col-xs-2.center= item.price.toFixed(2) + '€'
+				.col-xs-1.center= (item.tax * 100) + "%"
+				.col-xs-1.center= item.amount
+				.col-xs-1.center= item.unit
+				.col-xs-2.right= item.subtotal.toFixed(2) + '€'
+			hr
+		.row.total.right
+			.col-xs-12
+				p Loppusumma
+				strong= invoice.total.toFixed(2) + '€'
+				p Eräpäivä
+				time= invoice.date.due
+	section.container.payment
+		.row
+			.col-xs-12
+				h3.title Maksutiedot
+		hr
+		.row
+			.col-xs-4
+				h4 Maksun vastaanottaja
+				p= invoice.sender.bank.fullname
+			.col-xs-4
+				h4 IBAN
+				p= invoice.sender.bank.iban
+			.col-xs-2
+				h4 BIC
+				p= invoice.sender.bank.bic
+			.col-xs-2
+				h4 Viite
+				p= invoice.reference

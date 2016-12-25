@@ -1,0 +1,131 @@
+/*GENERAL*/
+html {
+	zoom: 0.8;
+	-webkit-print-color-adjust: exact;
+}
+body {
+	font-family: "Source Sans Pro";
+	font-weight: 400;
+	font-size: 1.2em;
+}
+
+h1,h2,h3 {
+	font-weight: 300;
+	margin: 0.3em 0;
+}
+
+h4,h5 {
+	font-weight: 400;
+	margin: 0.5em 0;
+}
+
+h5 {
+	font-size: 1.2em;
+}
+
+h1 {
+	font-size: 2.4em;
+}
+
+h2 {
+	font-size: 1.9em;
+}
+
+.center {
+	text-align: center;
+}
+.right {
+	text-align: right;
+}
+
+.container.heading {
+	margin: 2em auto;
+}
+
+.container.heading {
+	color: #555;
+}
+
+.container.heading h5 {
+	color: #000;
+}
+
+/*CONTACT INFO SECTION*/
+
+.contact .title {
+	text-transform: uppercase;
+	font-size: 1.3em;
+	letter-spacing: 0.2em;
+}
+
+.contact .info .heading {
+	color: black;
+	display: block;
+	font-size: 1.1em;
+}
+
+.contact .info {
+	color: #555;
+	font-size: 1em;
+}
+
+.contact h2 {
+	margin-bottom: 20px;
+}
+
+/*INVOICE SECTION*/
+
+.invoice .title h2 {
+	margin: 60px 0 30px 0;
+}
+
+.invoice .item {
+	font-weight: 400;
+	padding: 0.4em 0;
+	color: #555;
+}
+
+.invoice hr:last-of-type {
+	border-top: 2px solid #1abc9c;
+}
+
+
+.invoice .total p {
+	font-weight: 400;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	margin: 0;
+}
+
+.invoice .total strong {
+	font-weight: 300;
+	font-size: 2em;
+}
+
+.invoice .total time{
+	font-weight: 400;
+}
+
+/*PAYMENT SECTION*/
+
+.container.payment {
+	margin-top: 20px;
+}
+
+.container.payment .title {
+	font-size: 1.4em;
+}
+
+.payment hr {
+	border-top: 2px solid #1abc9c;
+}
+
+.payment h4 {
+	font-size: 1.2em;
+}
+
+.payment p {
+	font-size: 1.1em;
+	margin: 0;
+	color: #555;
+}
