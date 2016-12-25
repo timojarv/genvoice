@@ -9,6 +9,10 @@ var app = express();
 
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+	res.send("It works!");
+});
+
 app.post("/", (req, res) => {
 	var invoice = new Invoice(req.body.invoice);
 	invoice.toBuffer().then((buf) => {

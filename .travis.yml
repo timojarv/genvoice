@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "6"
+cache: yarn
+sudo: required
+services: 
+  - docker
+before_script:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker build -t timojarv/genvoice .
+after_success:
+  - docker push timojarv/genvoice
