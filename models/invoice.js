@@ -12,7 +12,8 @@ module.exports = function(invoice) {
 	//Calculate totals
 	invoice.total = 0;
 	invoice.items.forEach((item) => {
-		item.tax = item.tax || 0;
+		item.price = Number(item.price);
+		item.tax = Number(item.tax) || 0;
 		item.subtotal = (item.price * item.amount) * (1 + item.tax);
 		invoice.total += item.subtotal;
 		item.unit = item.unit || "-";

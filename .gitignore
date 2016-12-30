@@ -38,3 +38,6 @@ jspm_packages
 
 # Invoice data
 data
+
+# Generated pdfs
+*.pdf

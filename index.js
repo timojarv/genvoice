@@ -3,24 +3,17 @@
 
 var express = require("express"),
 		bodyParser = require("body-parser"),
-		Invoice = require("./models/invoice");
+		routes = require("./routes");
 
 var app = express();
 
+app.set("view engine", "pug");
+
+app.use(express.static("public"));
 app.use(bodyParser.json());
+app.use(routes);
 
-app.get("/", (req, res) => {
-	res.send("It actually works!");
-});
 
-app.post("/", (req, res) => {
-	var invoice = new Invoice(req.body.invoice);
-	invoice.toBuffer().then((buf) => {
-		res.type('pdf').send(buf);
-	}, (err) => {
-		res.send(err);
-	});
-});
 
 app.listen(process.env.PORT, process.env.IP, () => {
 	console.log("Genvoice server is running!");
