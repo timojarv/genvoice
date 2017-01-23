@@ -3,9 +3,10 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const routes = require("./routes");
 const webpack = require("webpack");
 const webpackMiddleware = require("webpack-dev-middleware");
+
+const indexRoutes = require("./routes");
 
 var app = express();
 
@@ -18,7 +19,9 @@ app.set("view engine", "pug");
 
 app.use(express.static("public"));
 app.use(bodyParser.json());
-app.use(routes);
+
+
+app.use('/', indexRoutes);
 
 
 

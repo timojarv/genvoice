@@ -7,6 +7,8 @@ var moment = require("moment"),
 		moment = require("moment"),
 		helpers = require("../helpers");
 
+const mongoose = require("mongoose");
+
 module.exports = function(invoice) {
 
 	//Calculate totals

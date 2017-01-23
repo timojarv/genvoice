@@ -7,7 +7,7 @@ var express = require("express"),
 var router = express.Router();
 
 router.get("/", (req, res) => {
-	res.render("create");
+	res.json({ version: 1 });
 });
 
 router.post("/", (req, res) => {
