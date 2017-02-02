@@ -1,10 +1,9 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var express = require("express"),
-		Invoice = require("./models/invoice");
-
-var router = express.Router();
+const router = require("express").Router();
+const	Invoice = require("../models/invoice");
+const { requireLogin } = require("../services/auth");
 
 router.get("/", (req, res) => {
 	res.json({ version: 1 });
@@ -19,6 +18,12 @@ router.post("/", (req, res) => {
 		});
 	}, (err) => {
 		res.json(err);
+	});
+});
+
+router.post("/login", requireLogin, (req, res) => {
+	res.send({
+		token: req.user.token()
 	});
 });
 

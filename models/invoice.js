@@ -1,13 +1,18 @@
 /* jshint node: true, esversion: 6 */
 'use strict';
 
-var moment = require("moment"),
-		pug = require("pug"),
-		pdf = require("html-pdf"),
-		moment = require("moment"),
-		helpers = require("../helpers");
-
+const moment = require("moment");
+const pug = require("pug");
+const pdf = require("html-pdf");
 const mongoose = require("mongoose");
+
+function generateReference(id) {
+	let sum = 0;
+	for(i = 0; i < id.length; i++) {
+		sum += id[id.length - 1 - i] * "731"[i % 3];
+	}
+	return id + ((10 - sum % 10) % 10);
+}
 
 module.exports = function(invoice) {
 
@@ -28,7 +33,7 @@ module.exports = function(invoice) {
 
 	//Generate reference
 	var id = ("" + moment().valueOf()).substr(-5);
-	invoice.reference = helpers.generateReference(id);
+	invoice.reference = generateReference(id);
 
 	var html = pug.renderFile('./templates/invoice.pug', {invoice: invoice});
 	var filename = "invoice_" + invoice.reference + ".pdf";
