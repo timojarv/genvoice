@@ -20,4 +20,18 @@ router.post("/", requireToken, (req, res) => {
         });
 });
 
+//UPDATE
+router.put("/:id", requireToken, (req, res) => {
+    let set = {};
+    Object.keys(req.body).filter(k => k != '_id').forEach(key => {
+        set["contacts.$." + key] = req.body[key];
+    });
+    User.findOneAndUpdate(
+        {_id: req.user._id, "contacts._id": req.params.id },
+        { $set: set }
+    ).then(user => {
+        res.send({ id: req.params.id });
+    });
+});
+
 module.exports = router;
