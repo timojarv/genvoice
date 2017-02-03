@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const passportLocalMongoose = require("passport-local-mongoose");
 const config = require("../config");
 
+const Contact = require("./contact");
+
 const BankInfo = new mongoose.Schema({
 	fullname: String,
 	iban: String,
@@ -17,7 +19,8 @@ const userSchema = new mongoose.Schema({
 	country: String,
 	email: String,
 	business_id: String,
-	bank: BankInfo
+	bank: BankInfo,
+	contacts: [Contact]
 });
 
 //Plug in passport local

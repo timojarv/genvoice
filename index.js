@@ -9,6 +9,7 @@ const cors = require("cors");
 
 const indexRoutes = require("./routes");
 const userRoutes = require("./routes/user");
+const contactsRoutes = require("./routes/contacts");
 
 //Connect to DB
 const DB_URL = "localhost";
@@ -28,6 +29,7 @@ app.use(cors());
 
 app.use('/', indexRoutes);
 app.use('/user', userRoutes);
+app.use('/contacts', contactsRoutes);
 
 
 
