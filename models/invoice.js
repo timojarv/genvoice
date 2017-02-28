@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 
 function generateReference(id) {
 	let sum = 0;
-	for(i = 0; i < id.length; i++) {
+	for(let i = 0; i < id.length; i++) {
 		sum += id[id.length - 1 - i] * "731"[i % 3];
 	}
 	return id + ((10 - sum % 10) % 10);
@@ -20,7 +20,7 @@ module.exports = function(invoice) {
 	invoice.total = 0;
 	invoice.items.forEach((item) => {
 		item.price = Number(item.price);
-		item.tax = Number(item.tax) || 0;
+		item.tax = Number(item.tax) / 100 || 0;
 		item.subtotal = (item.price * item.amount) * (1 + item.tax);
 		invoice.total += item.subtotal;
 		item.unit = item.unit || "-";
