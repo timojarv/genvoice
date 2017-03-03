@@ -12,7 +12,7 @@ const userRoutes = require("./routes/user");
 const contactsRoutes = require("./routes/contacts");
 
 //Connect to DB
-const DB_URL = "localhost";
+const DB_URL = process.env.MONGODB_ADDR || "localhost";
 mongoose.connect(`${DB_URL}:27017/genvoice`);
 
 //Set mongoose's promises
