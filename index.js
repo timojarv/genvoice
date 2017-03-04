@@ -9,7 +9,8 @@ const cors = require("cors");
 
 const indexRoutes = require("./routes");
 const userRoutes = require("./routes/user");
-const contactsRoutes = require("./routes/contacts");
+const contactRoutes = require("./routes/contact");
+const invoiceRoutes = require("./routes/invoice");
 
 //Connect to DB
 const DB_URL = process.env.MONGODB_ADDR || "localhost";
@@ -28,8 +29,9 @@ app.use(cors());
 
 
 app.use('/', indexRoutes);
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 app.use('/contacts', contactsRoutes);
+app.use('/invoices', invoiceRoutes);
 
 
 

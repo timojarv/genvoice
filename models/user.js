@@ -4,6 +4,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const config = require("../config");
 
 const Contact = require("./contact");
+const Invoice = require("./invoice");
 
 const BankInfo = new mongoose.Schema({
 	fullname: String,
@@ -20,7 +21,11 @@ const userSchema = new mongoose.Schema({
 	email: String,
 	business_id: String,
 	bank: BankInfo,
-	contacts: [Contact]
+	contacts: [Contact],
+	invoices: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Invoice"
+	}]
 });
 
 //Plug in passport local

@@ -2,11 +2,11 @@
 'use strict';
 
 const moment = require("moment");
-const pug = require("pug");
-const pdf = require("html-pdf");
+//const pug = require("pug");
+//const pdf = require("html-pdf");
 const mongoose = require("mongoose");
 
-function generateReference(id) {
+/*function generateReference(id) {
 	let sum = 0;
 	for(let i = 0; i < id.length; i++) {
 		sum += id[id.length - 1 - i] * "731"[i % 3];
@@ -64,3 +64,44 @@ module.exports = function(invoice) {
 	});
 
 };
+*/
+
+const contactSchema = require("./contact");
+const productSchema = require("./product");
+
+
+const invoiceSchema = new mongoose.Schema({
+	title: String,
+	reference: Number,
+	term: Number,
+	dateCreated: Number,
+	recipient: contactSchema,
+	items: [productSchema]
+});
+
+
+//Virtuals
+invoiceSchema.virtual('dateDue').get(function() {
+	return moment(this.dateCreated).add(this.term, "days").valueOf();
+});
+
+invoiceSchema.virtual('total').get(function() {
+	return items.reduce((a, item) => a + item.subtotal, 0);
+});
+
+//Hooks
+invoiceSchema.pre('save', function(next) {
+	this.dateCreated = new Date.now();
+	this.reference = generateReference();
+});
+
+function generateReference() {
+	let sum = 0;
+	let id = ("" + Date.now()).substr(-5);
+	for(let i = 0; i < id.length; i++) {
+		sum += id[id.length - 1 - i] * "731"[i % 3];
+	}
+	return Number(id + ((10 - sum % 10) % 10));
+}
+
+module.exports = mongoose.model("invoice", invoiceSchema);
