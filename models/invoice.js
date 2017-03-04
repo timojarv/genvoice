@@ -87,8 +87,8 @@ function createPDF() {
 	
 		const invoice = this.toObject();
 		invoice.recipient = invoice.sender.contacts.reduce(
-			(a, c) => c._id == invoice.recipient ? c : undefined
-		);
+			(a, c) => c._id == invoice.recipient ? c : a
+		, {});
 
 		const html = renderHTML(invoice);
 
