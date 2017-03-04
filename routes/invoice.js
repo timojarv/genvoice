@@ -6,16 +6,29 @@ const { requireToken } = require("../services/auth");
 
 //LIST
 router.get("/", requireToken, (req, res) => {
-    res.send({ invoices: req.user.invoices });
+    User.findById(req.user._id).select('invoices').populate('invoices')
+        .then(user => res.send({ invoices: user.invoices }));
 });
 
 //CREATE
 router.post("/", requireToken, (req, res) => {
-    Invoice.create(req.body)
+    const invoice = Object.assign({}, req.body);
+    invoice.sender = req.user;
+    Invoice.create(invoice)
         .then(addInvoiceToUser(req.user))
         .then(invoice => res.send({ id: invoice._id }));
 });
-//READ
+
+//READ (Create PDF)
+router.get("/:id", (req, res) => {
+    const id = req.params.id;
+    //if(req.user.invoices.indexOf(id) < 0) res.status(403).send({ error: "insufficient permissions" });
+    Invoice.findById(id).populate('sender')
+        .then(invoice => invoice.createPDF())
+        .then(buffer => res.set('Content-Type', 'application/pdf').send(buffer))
+        .catch(error => res.status(500).send({ error }));
+});
+
 //UPDATE
 //REMOVE
 

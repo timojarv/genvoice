@@ -2,72 +2,13 @@
 'use strict';
 
 const moment = require("moment");
-//const pug = require("pug");
-//const pdf = require("html-pdf");
 const mongoose = require("mongoose");
+const pug = require("pug");
+const pdf = require("html-pdf");
 
-/*function generateReference(id) {
-	let sum = 0;
-	for(let i = 0; i < id.length; i++) {
-		sum += id[id.length - 1 - i] * "731"[i % 3];
-	}
-	return id + ((10 - sum % 10) % 10);
-}
-
-module.exports = function(invoice) {
-
-	//Calculate totals
-	invoice.total = 0;
-	invoice.items.forEach((item) => {
-		item.price = Number(item.price);
-		item.tax = Number(item.tax) / 100 || 0;
-		item.subtotal = (item.price * item.amount) * (1 + item.tax);
-		invoice.total += item.subtotal;
-		item.unit = item.unit || "-";
-	});
-
-	//Set dates
-	invoice.date = {};
-	invoice.date.created = moment().format("D.M.Y");
-	invoice.date.due = moment().add(invoice.term, "days").format("D.M.Y");
-
-	//Generate reference
-	var id = ("" + moment().valueOf()).substr(-5);
-	invoice.reference = generateReference(id);
-
-	var html = pug.renderFile('./templates/invoice.pug', {invoice: invoice});
-	var filename = "invoice_" + invoice.reference + ".pdf";
-	var options = {
-		format: "A4",
-		border: '10mm',
-		quality: "80"
-	};
-
-	this.save = () => new Promise((resolve, reject) => {
-			pdf.create(html, options).toFile("./public/" + filename, (err) => {
-				if(err) {
-					reject(err);
-				} else {
-					resolve(filename);
-				}
-			});
-	});
-
-	this.toBuffer = () => new Promise((resolve, reject) => {
-			pdf.create(html, options).toBuffer((err, buf) => {
-				if(err) {
-					reject(err);
-				} else {
-					resolve(buf);
-				}
-			});
-	});
-
-};
-*/
-
-const contactSchema = require("./contact");
 const productSchema = require("./product");
+const User = require("./user");
+
 
 
 const invoiceSchema = new mongoose.Schema({
@@ -75,9 +16,16 @@ const invoiceSchema = new mongoose.Schema({
 	reference: Number,
 	term: Number,
 	dateCreated: Number,
-	recipient: contactSchema,
+	recipient: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "contact"
+	},
+	sender: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'user'
+	},
 	items: [productSchema]
-});
+}, { id: false, toJSON: { getters: true }, toObject: { getters: true } });
 
 
 //Virtuals
@@ -86,14 +34,26 @@ invoiceSchema.virtual('dateDue').get(function() {
 });
 
 invoiceSchema.virtual('total').get(function() {
-	return items.reduce((a, item) => a + item.subtotal, 0);
+	return this.items.reduce((a, item) => a + item.subtotal, 0);
 });
 
 //Hooks
 invoiceSchema.pre('save', function(next) {
-	this.dateCreated = new Date.now();
+	this.dateCreated = Date.now();
 	this.reference = generateReference();
+	return next();
 });
+
+//Methods
+invoiceSchema.methods.createPDF = createPDF;
+
+module.exports = mongoose.model("invoice", invoiceSchema);
+
+
+
+
+
+// HELPERS
 
 function generateReference() {
 	let sum = 0;
@@ -104,4 +64,40 @@ function generateReference() {
 	return Number(id + ((10 - sum % 10) % 10));
 }
 
-module.exports = mongoose.model("invoice", invoiceSchema);
+function renderHTML(invoice) {
+	//Set dates
+	invoice.date = {
+		created: moment(invoice.dateCreated).format("D.M.Y"),
+		due: moment(invoice.dateDue).format("D.M.Y")
+	};
+
+	console.log(invoice)
+
+	return pug.renderFile('./templates/invoice.pug', {invoice});
+}
+
+function createPDF() {
+	return new Promise((resolve, reject) => {
+
+		const pdfOptions = {
+			format: "A4",
+			border: '10mm',
+			quality: "80"
+		};
+	
+		const invoice = this.toObject();
+		invoice.recipient = invoice.sender.contacts.reduce(
+			(a, c) => c._id == invoice.recipient ? c : undefined
+		);
+
+		const html = renderHTML(invoice);
+
+		pdf.create(html, pdfOptions).toBuffer((error, buffer) => {
+			if(error) {
+				reject(error);
+			} else {
+				resolve(buffer);
+			}
+		});
+	});
+}

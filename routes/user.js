@@ -3,7 +3,7 @@ const { requireToken } = require("../services/auth");
 const User = require("../models/user");
 
 // CREATE
-router.post("/new", (req, res) => {
+router.post("/", (req, res) => {
 	const { email, password } = req.body;
 	User.register(new User({ email }), password, (err, user) => {
 		if(err) {

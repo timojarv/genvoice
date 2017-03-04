@@ -29,8 +29,8 @@ app.use(cors());
 
 
 app.use('/', indexRoutes);
-app.use('/users', userRoutes);
-app.use('/contacts', contactsRoutes);
+app.use('/user', userRoutes);
+app.use('/contacts', contactRoutes);
 app.use('/invoices', invoiceRoutes);
 
 
