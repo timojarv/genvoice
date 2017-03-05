@@ -71,8 +71,6 @@ function renderHTML(invoice) {
 		due: moment(invoice.dateDue).format("D.M.Y")
 	};
 
-	console.log(invoice)
-
 	return pug.renderFile('./templates/invoice.pug', {invoice});
 }
 
@@ -86,9 +84,12 @@ function createPDF() {
 		};
 	
 		const invoice = this.toObject();
+		console.log("Recipient id:", invoice.recipient);
+		console.log("Sender:", invoice.sender);
 		invoice.recipient = invoice.sender.contacts.reduce(
-			(a, c) => c._id == invoice.recipient ? c : a
+			(a, c) => invoice.recipient.equals(c._id) ? c : a
 		, {});
+		console.log("Recipient reduced:", invoice.recipient);
 
 		const html = renderHTML(invoice);
 
