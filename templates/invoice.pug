@@ -79,7 +79,7 @@ body
 			.row.item
 				.col-xs-5= item.name
 				.col-xs-2.center= item.price.toFixed(2) + '€'
-				.col-xs-1.center= (item.tax * 100) + "%"
+				.col-xs-1.center= item.tax + "%"
 				.col-xs-1.center= item.amount
 				.col-xs-1.center= item.unit
 				.col-xs-2.right= item.subtotal.toFixed(2) + '€'
